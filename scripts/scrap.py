@@ -1,13 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
 import time 
+from pageinfo import PageInfo
+import json
 
-DETAIL_PAGE_URLS_FILE = 'data/detail_page_urls.txt' 
+MEMBER_PREVIEWS_JSON = 'data/member_previews.json' 
+TEST_YODA_FIRST_PAGE_PREVIEWS = 'data/test_yoda_first_page_previews.html'
+BASE_URL = 'https://www.nogizaka46.com'
+
+def fetch_soup(url):
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
+    soup = BeautifulSoup(response.content, "html.parser")
+    return soup
+
+def fetch_test_soup(url):
+    html_content = open('data/test_output.html')
+    soup = BeautifulSoup(html_content, "html.parser")
+    return soup
 
 '''
 scrape URLs from one dashboard page.
 '''
-def scrape_hrefs(url):
+def scrape_page_previews(url):
     """
     Scrapes the href attribute from <a> elements with a specific class.
 
@@ -21,18 +36,47 @@ def scrape_hrefs(url):
     """
     
     try:
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
+        soup = fetch_soup(url) 
+        
+        bl_list = soup.find("div", class_="bl--list")
+        
+        links = []
+        thumb_links = []
+        titles = []
+        dates = []
+        
 
-        soup = BeautifulSoup(response.content, "html.parser")
+        for item in bl_list.find_all("a", class_="bl--card js-pos a--op hv--thumb"):
+            link = item["href"] # it's a relative link, missed the prefix
+            links.append(BASE_URL + link)
 
-        hrefs = []
-        for a_tag in soup.find_all("a", class_="bl--card js-pos a--op hv--thumb"):
-            href = a_tag.get("href")
-            if href:  # Check if the href attribute exists and is not empty
-                hrefs.append(href)
+        for bl_thumb in bl_list.find_all('div', class_ = 'bl--card__img hv--thumb__i'):
+            bl_bg = bl_thumb.find('div', class_='m--bg js-bg')
+            thumb_link = bl_bg['data-src']
+            thumb_links.append(thumb_link)
+        
+        for card_text in bl_list.find_all('div', class_ = 'bl--card__tx'):
+            title = card_text.find('p', class_='bl--card__ttl').text
+            titles.append(title)
 
-        return hrefs
+            _date = card_text.find('p', class_ = 'bl--card__date').text
+            dates.append(_date)
+
+
+        #print(f'links ({len(links)}): {links}\n thumb_links ({len(thumb_links)}): {thumb_links}\n \
+        #      titles ({len(titles)}): {titles}\n dates ({len(dates)}): {dates}\n')
+
+        cards = []
+        for i in range(len(links)):
+            card = PageInfo(
+                page_link=links[i]
+                , thumb_link = thumb_links[i]
+                , title = titles[i]
+                , datez = dates[i]
+            )
+            cards.append(card.to_dict())
+            
+        return cards
 
     except requests.exceptions.RequestException as e:
         print(f"Error fetching URL: {e}")
@@ -45,14 +89,13 @@ def scrape_hrefs(url):
         return []
 
 def main():
-    pass
-    
     '''
     collect url of all pages of a member
     each url contains the url of N (= 10) pages. list the urls of the single pages
     for each URL get URL of the pages. 
     for each page URL get its content and save it in a folder. 
     '''
+    
     dash_page_urls = [ "https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1521&ct=36760" 
                       , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=2602&page=1&ct=36760&cd=MEMBER' 
                       , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4625&page=2&ct=36760&cd=MEMBER' 
@@ -60,23 +103,24 @@ def main():
                       , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4703&page=4&ct=36760&cd=MEMBER'
                       , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4714&page=5&ct=36760&cd=MEMBER'
                       ]
-    detail_page_urls = []
-    BASE_URL = 'https://www.nogizaka46.com'
+    
+    #dash_page_urls = [ "https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1521&ct=36760" ] ## TODO sostituisci con quello sopra
+    page_previews = []
+    
 
     for url in dash_page_urls:
         print(f"scraping url {url}...")
         time.sleep(2)
-        scraped = (scrape_hrefs(url))
-        scraped = list(map(lambda s: BASE_URL + s, scraped))
-        detail_page_urls = [*detail_page_urls, *scraped]
+        cur_page_previews = scrape_page_previews(url)
+        page_previews += cur_page_previews
+
     
     #print (f"detail_page_urls: {detail_page_urls}")
     
-    with open(DETAIL_PAGE_URLS_FILE, 'w') as f:  # 'w' mode truncates the file
+    with open(MEMBER_PREVIEWS_JSON, 'w') as f:  # 'w' mode truncates the file
         pass
-    with open(DETAIL_PAGE_URLS_FILE, 'a') as f:
-        for u in detail_page_urls:
-            f.write(u + '\n')
+    with open(MEMBER_PREVIEWS_JSON, 'a') as f:
+        json.dump(page_previews, f, indent=2)
 
 
 if __name__ == '__main__':
