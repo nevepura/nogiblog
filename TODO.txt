@@ -4,5 +4,6 @@ Resta da fare:
 2 individuare il testo e trasformarlo in un formato leggibile. 
 
 più avanti
+- muovi le cartelle data e pages fuori dalla cartella scripts, e aggiornale sul gitignore.
 3 generalizzare il processo per altri membri
 4 creare il sito
