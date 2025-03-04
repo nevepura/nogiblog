@@ -1,3 +1,9 @@
+'''
+Input: a series of urls of a member, correponding to the pages of her dashboard
+Output: previews that contain the urls of the detail pages, titles, dates.
+
+'''
+
 import requests
 from bs4 import BeautifulSoup
 import time 
@@ -7,6 +13,13 @@ import json
 MEMBER_PREVIEWS_JSON = 'data/member_previews.json' 
 TEST_YODA_FIRST_PAGE_PREVIEWS = 'data/test_yoda_first_page_previews.html'
 BASE_URL = 'https://www.nogizaka46.com'
+DASH_PAGE_URLS = [ "https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1521&ct=36760" 
+                    , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=2602&page=1&ct=36760&cd=MEMBER' 
+                    , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4625&page=2&ct=36760&cd=MEMBER' 
+                    , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4647&page=3&ct=36760&cd=MEMBER'
+                    , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4703&page=4&ct=36760&cd=MEMBER'
+                    , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4714&page=5&ct=36760&cd=MEMBER'
+                ]
 
 def fetch_soup(url):
     response = requests.get(url)
@@ -96,13 +109,7 @@ def main():
     for each page URL get its content and save it in a folder. 
     '''
     
-    dash_page_urls = [ "https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1521&ct=36760" 
-                      , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=2602&page=1&ct=36760&cd=MEMBER' 
-                      , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4625&page=2&ct=36760&cd=MEMBER' 
-                      , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4647&page=3&ct=36760&cd=MEMBER'
-                      , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4703&page=4&ct=36760&cd=MEMBER'
-                      , 'https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=4714&page=5&ct=36760&cd=MEMBER'
-                      ]
+    dash_page_urls = DASH_PAGE_URLS
     
     #dash_page_urls = [ "https://www.nogizaka46.com/s/n46/diary/MEMBER/list?ima=1521&ct=36760" ] ## TODO sostituisci con quello sopra
     page_previews = []

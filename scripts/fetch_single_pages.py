@@ -25,7 +25,12 @@ def main():
             clean_date = datez.replace(' ', '_')
 
             blog_post_path = os.path.join(MEMBER_FOLDER, clean_date)
-            print(f'path for single blog post: {MEMBER_NAME}: {blog_post_path}')
+            print(f'New path for single blog post: {MEMBER_NAME}: {blog_post_path}')
+            
+            # If the path already exists, then the page has already been fetched. Then skip this fetching.
+            if os.path.exists(blog_post_path):
+                print(f'The current page {blog_post_path} is already present. Skipping current fetch. ')
+                continue
             os.makedirs(blog_post_path, exist_ok=True)
 
             # save the preview file in the folder as preview.json
