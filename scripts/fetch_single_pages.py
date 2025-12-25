@@ -1,17 +1,18 @@
 import os
 import json
 import requests
+from config import MEMBER_NAME
 '''
 Input: member_previews
 Output: all the html pages of a member
 '''
 
 PAGES_FOLDER = 'pages'
-MEMBER_NAME = 'shiori_kubo' #TODO edit
 MEMBER_FOLDER = os.path.join(PAGES_FOLDER, MEMBER_NAME)
 MEMBER_PREVIEWS = 'data/member_previews.json'
 PREVIEW_FILE = 'preview.json'
 BLOG_POST_FILE = 'blogpost.html'
+
 
 def main():
     # open member_previews

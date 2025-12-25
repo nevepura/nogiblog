@@ -6,11 +6,11 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import requests
 import shutil
+from config import MEMBER_NAME, BASE_URL
 
 # Config
-directory = "pages/shiori_kubo"
+MEMBER_DIRECTORY = f"pages/{MEMBER_NAME}"
 IMAGES_SUBFOLDER = 'images'
-BASE_URL = 'https://www.nogizaka46.com/'
 
 import os
 
@@ -141,7 +141,7 @@ def download_image(url, folder_path):
 
 
 def main():
-    list_folders_in_directory(directory)
+    list_folders_in_directory(MEMBER_DIRECTORY)
 
 
 if __name__ == '__main__':
