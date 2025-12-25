@@ -68,6 +68,7 @@ def download_images_from_blogposts(base_directory):
             images_path = os.path.join(folder_path, IMAGES_SUBFOLDER)
             
             delete_directory(images_path)
+            print(f'The directory {images_path} will be created')
             os.makedirs(images_path, exist_ok=True)
 
             if os.path.isdir(folder_path):
