@@ -7,7 +7,7 @@ Output: all the html pages of a member
 '''
 
 PAGES_FOLDER = 'pages'
-MEMBER_NAME = 'yuki_yoda'
+MEMBER_NAME = 'shiori_kubo' #TODO edit
 MEMBER_FOLDER = os.path.join(PAGES_FOLDER, MEMBER_NAME)
 MEMBER_PREVIEWS = 'data/member_previews.json'
 PREVIEW_FILE = 'preview.json'
