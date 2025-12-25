@@ -2,7 +2,6 @@
 ## Configuration
 - in config.py, edit the MEMBER_NAME
 - in config.py edit the DASH_PAGE_URLS
-- in the "pages" folder, create a folder <name>_<lastname> of the new member
 
 ## Execution
 - move in the "scripts" folder
