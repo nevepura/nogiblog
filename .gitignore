@@ -179,5 +179,3 @@ pyrightconfig.json
 bin/
 lib64
 pyvenv.cfg
-scripts/data/*
-scripts/pages/*

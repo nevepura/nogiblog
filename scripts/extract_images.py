@@ -8,7 +8,7 @@ import requests
 import shutil
 
 # Config
-directory = "pages/yuki_yoda"
+directory = "pages/shiori_kubo"
 IMAGES_SUBFOLDER = 'images'
 BASE_URL = 'https://www.nogizaka46.com/'
 
