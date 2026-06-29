@@ -2,6 +2,7 @@
 ## Configuration
 - in config.py, edit the MEMBER_NAME
 - in config.py edit the DASH_PAGE_URLS
+- source .venv/bin/activate
 
 ## Execution
 - move in the "scripts" folder
