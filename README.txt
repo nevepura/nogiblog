@@ -5,7 +5,7 @@
 - source .venv/bin/activate
 
 ## Execution
-- move in the "scripts" folder
+- cd scripts
 - run fetch_previews.py to generate the member_previews.json: it will be used by the next script 
 - launch fetch_single_pages.py
 - launch extract_images.py
