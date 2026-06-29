@@ -63,6 +63,9 @@ def download_images_from_blogposts(base_directory):
             print(f"Error: Invalid directory path: {base_directory}")
             return
 
+        folder_total = sum([1 for x in os.listdir(base_directory)])
+        folder_counter = 0
+
         for folder_name in os.listdir(base_directory):
             folder_path = os.path.join(base_directory, folder_name)
             images_path = os.path.join(folder_path, IMAGES_SUBFOLDER)
@@ -72,6 +75,9 @@ def download_images_from_blogposts(base_directory):
             os.makedirs(images_path, exist_ok=True)
 
             if os.path.isdir(folder_path):
+                folder_counter += 1
+                print(f'Processing folder: {folder_counter}/{folder_total} ({int(folder_counter/folder_total*100)}%)')
+
                 blogpost_path = os.path.join(folder_path, "blogpost.html")
 
                 if os.path.exists(blogpost_path) and os.path.isfile(blogpost_path):
